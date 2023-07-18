@@ -5,13 +5,14 @@
   <title></title>
 </head>
 <body>
+  <h1>MembersOnly area</h1>
     <% if (user) {%>
     <h1>Hello <%= user.username %>!</h1>
     <a href="/log-out">log out</a>
     <%} else { %>
     
   <h1>please log in:</h1>
-<form action="/log-in" method="POST">
+<form action="/members/log-in" method="POST">
   <label for="username">Username</label>
   <input name="username" placeholder="username" type="text" />
   <label for="password">Password</label>
