@@ -1,51 +1,18 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require("bcryptjs");
-const Member = require("../models/member");
-const passport = require("../passport");
 
-
+const members_controller = require("../controllers/membersController")
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.render('members_area', { title: 'MembersOnly Area', user: req.user });
-});
+router.get('/', members_controller.index)
 
-router.get("/sign-up", (req, res) => res.render("sign_up_form"));
+router.get("/sign-up", members_controller.sign_up_get)
 
-router.post("/sign-up", async (req, res, next) => {
-  bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-  if (err) {
-      return next(err);
-  } else {
-      const member = new Member({
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          username: req.body.username,
-          status: req.body.status,
-          password: hashedPassword
-      });
-      const result = await member.save();
-      res.redirect("/");
-  }
-  })
-});
+router.post("/sign-up", members_controller.sign_up_post)
 
-router.post(
-  "/log-in",
-  passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/"
-  })
-  );
+router.post("/log-in", members_controller.log_in_post)
 
-  router.get("/log-out", (req, res, next) => {
-  req.logout(function (err) {
-      if (err) {
-      return next(err);
-      }
-      res.redirect("/");
-  });
-  });
+router.post("/log-out", members_controller.log_out_get)
+
 
 module.exports = router;
