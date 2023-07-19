@@ -14,6 +14,7 @@ exports.index = asyncHandler(async (req, res, next) => {
         memberlist: allMembers });
   });
 
+
 exports.sign_up_get = asyncHandler(async (req, res, next) =>{
     res.render("sign_up_form");
 })
@@ -33,23 +34,61 @@ exports.sign_up_post = [
             return res.redirect("/members")
         }
 
-        bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-            if (err) {
-                return next(err);
-            } else {
-                const member = new Member({
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    username: req.body.username,
-                    status: req.body.status,
-                    password: hashedPassword
-                });
-                const result = await member.save();
-                return res.redirect("/members");
-                }
-            })
-      })
-    ]
+
+        try {
+            // Check if the username already exists in the database
+            const existingMember = await Member.findOne({ username: req.body.username });
+            if (existingMember) {
+                return res.redirect("/members"); // Handle the case where username already exists
+            }
+
+            // Hash the password securely
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+            const member = new Member({
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                username: req.body.username,
+                status: req.body.status,
+                password: hashedPassword
+            });
+            
+            await member.save();
+
+            // Call the passport authenticate function to perform authentication
+            passport.authenticate("local", {
+                successRedirect: "/members",
+                failureRedirect: "/members"
+            })(req, res, next);
+        } catch (err) {
+            return next(err);
+        }
+    })
+];
+
+    //     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+    //         if (err) {
+    //             return next(err);
+    //         } else {
+    //             const member = new Member({
+    //                 firstname: req.body.firstname,
+    //                 lastname: req.body.lastname,
+    //                 username: req.body.username,
+    //                 status: req.body.status,
+    //                 password: hashedPassword
+    //             });
+    //             const result = await member.save();
+
+    //             passport.authenticate("local", {
+    //                 successRedirect: "/members",
+    //                 failureRedirect: "/members"
+    //             })
+
+    //             // return res.redirect("/members");
+    //             }
+    //         })
+    //   })
+    // ]
 
 exports.log_in_post = passport.authenticate("local", {
         successRedirect: "/members",
