@@ -12,7 +12,7 @@ router.post("/sign-up", members_controller.sign_up_post)
 
 router.post("/log-in", members_controller.log_in_post)
 
-router.post("/log-out", members_controller.log_out_get)
+router.get("/log-out", members_controller.log_out_get)
 
 router.post("/join", members_controller.join_post)
 
