@@ -6,9 +6,12 @@ const passport = require("../passport");
 const Member = require("../models/member")
 
 exports.index = asyncHandler(async (req, res, next) => {
+    const allMembers = await Member.find({}, "username").exec()
+    
     res.render('members_area', { 
         title: 'MembersOnly Area', 
-        user: req.user });
+        user: req.user,
+        memberlist: allMembers });
   });
 
 exports.sign_up_get = asyncHandler(async (req, res, next) =>{
@@ -25,9 +28,9 @@ exports.sign_up_post = [
     
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        if (errors) {
+        if (!errors.isEmpty()) {
             console.log(errors)
-            return res.redirect("/")
+            return res.redirect("/members")
         }
 
         bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
@@ -42,18 +45,45 @@ exports.sign_up_post = [
                     password: hashedPassword
                 });
                 const result = await member.save();
-                return res.redirect("/");
+                return res.redirect("/members");
                 }
             })
       })
     ]
 
-exports.log_in_post = asyncHandler (async (req, res, next) =>{
-    passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/"
+exports.log_in_post = passport.authenticate("local", {
+        successRedirect: "/members",
+        failureRedirect: "/members"
     })
-})
+
+
+exports.join_post = asyncHandler(async (req, res, next) => {
+    const memberId = req.user._id;
+    let newStatus;
+    
+    if (req.body.password === "apple") {
+        newStatus = "member";
+    } else if (req.body.password === "orange") {
+        newStatus = "admin";
+    } else {
+        return res.status(403).json({ success: false, message: "Invalid password." });
+    }
+    
+    const updatedMember = await Member.findOneAndUpdate(
+        { _id: memberId },
+        { $set: { status: newStatus } },
+        { new: true }
+    );
+    
+    if (updatedMember) {
+        res.redirect("/members");
+        console.log({ success: true, message: "Member status updated successfully." });
+    } else {
+        res.redirect("/members");
+        console.log({ success: false, message: "Member not found." });
+    }
+});
+
 
 exports.log_out_get = asyncHandler (async (req, res, next) =>{
     req.logout(function (err) {

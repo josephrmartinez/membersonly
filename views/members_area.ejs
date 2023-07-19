@@ -7,8 +7,20 @@
 <body>
   <h1>MembersOnly area</h1>
     <% if (user) {%>
-    <h1>Hello <%= user.username %>!</h1>
-    <a href="/log-out">log out</a>
+    <h1>Hello <%= user.firstname %>!</h1>
+      <h3> Membership status: <%= user.status %> </h3>
+
+      <% if (user.status === "pending") {%>
+        <h1>obtain full member status:</h1>
+        <form action="/members/join" method="POST">
+          <label for="secret">Secret Handshake:</label>
+          <input name="password" type="password" />
+          <button>Join the Club</button>
+        </form>
+      <%} %>
+      
+
+    <a href="/members/log-out">log out</a>
     <%} else { %>
     
   <h1>please log in:</h1>
