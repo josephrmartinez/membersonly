@@ -21,9 +21,23 @@
     <%} %>
 
     <h3>secret message board:</h3>
-    <p>message 1</p>
-    <p>message 2</p>
-    <p>message 3</p>
+    <% if (allMessages && allMessages.length > 0) { %>
+      <ul>
+          <% allMessages.forEach(message => { %>
+              <li>
+                <strong><% if (user) {%> <%= message.author.username %> <%} else  {%> secret member <%}  %></strong><br>
+                <%= message.title %><br>
+                <%= message.message %><br>
+                <%= message.timestamp %><br>
+                <br>
+                
+                  
+              </li>
+          <% }) %>
+      </ul>
+  <% } else { %>
+      <p>No messages found.</p>
+  <% } %>
 
 
     

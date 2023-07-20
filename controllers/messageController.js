@@ -6,7 +6,9 @@ const Member = require("../models/member")
 const Message = require("../models/message")
 
 exports.index = asyncHandler(async (req, res, next) => {
-    const allMessages = await Message.find({}, "title message timestamp author").exec()
+    const allMessages = await Message.find({}, "title message timestamp author")
+    .populate("author")
+    .sort({timestamp: -1}).exec()
     
     res.render('index', { 
         allMessages: allMessages,
@@ -34,7 +36,7 @@ exports.message_post = [
                 title: req.body.title,
                 message: req.body.message,
                 timestamp: new Date(),
-                author: req.user._id,
+                author: req.user,
             });
             
             await message.save();
