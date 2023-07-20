@@ -7,7 +7,7 @@
   <body>
     <h1>Members Only</h1>
     <a href="/members">MembersOnly area</a>
-    <% if (user) {%>
+    <% if (user && ((user.status === "admin") || (user.status === "member")) ) {%>
     <h3>post a message:</h3>
     <form action="/message/post" method="POST">
       <label for="user" hidden>user</label>
