@@ -7,23 +7,24 @@
 <body>
   <h1>MembersOnly area</h1>
     <% if (user) {%>
-    <h1>Hello <%= user.firstname %>!</h1>
-      <h3> Membership status: <%= user.status %> </h3>
+    <h3>Hello <%= user.firstname %>!</h3>
+    <h3> Membership status: <%= user.status %> </h3>
 
-      <% if (user.status === "pending") {%>
-        <h1>obtain full member status:</h1>
-        <form action="/members/join" method="POST">
-          <label for="secret">Secret Handshake:</label>
-          <input name="password" type="password" />
-          <button>Join the Club</button>
-        </form>
-      <%} %>
+    <% if (user.status === "pending") {%>
+      <h3>obtain full member status:</h3>
+      <form action="/members/join" method="POST">
+        <label for="secret">Secret Handshake:</label>
+        <input name="password" type="password" />
+        <button>Join the Club</button>
+      </form>
+    <%} %>
+
       
 
     <a href="/members/log-out">log out</a>
     <%} else { %>
     
-  <h1>please log in:</h1>
+  <h3>please log in:</h3>
 <form action="/members/log-in" method="POST">
   <label for="username">Username</label>
   <input name="username" placeholder="username" type="text" />
@@ -31,8 +32,12 @@
   <input name="password" type="password" />
   <button>Log In</button>
 </form>
-<h1>or sign up:</h1>
+<h3>or sign up:</h3>
   <a href="/members/sign-up">sign up</a>
   <% }%>
+
+  <br>
+  <br>
+  <a href="/">message board</a>
 </body>
 </html>

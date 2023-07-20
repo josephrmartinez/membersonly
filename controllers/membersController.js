@@ -25,15 +25,12 @@ exports.sign_up_post = [
     body("username", "You must provide a username").trim().isLength({min: 2}).escape(),
     body("password", "You must provide a password").trim().isLength({min: 2}).escape(),
     
-    
-    
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log(errors)
             return res.redirect("/members")
         }
-
 
         try {
             // Check if the username already exists in the database
@@ -66,35 +63,10 @@ exports.sign_up_post = [
     })
 ];
 
-    //     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-    //         if (err) {
-    //             return next(err);
-    //         } else {
-    //             const member = new Member({
-    //                 firstname: req.body.firstname,
-    //                 lastname: req.body.lastname,
-    //                 username: req.body.username,
-    //                 status: req.body.status,
-    //                 password: hashedPassword
-    //             });
-    //             const result = await member.save();
-
-    //             passport.authenticate("local", {
-    //                 successRedirect: "/members",
-    //                 failureRedirect: "/members"
-    //             })
-
-    //             // return res.redirect("/members");
-    //             }
-    //         })
-    //   })
-    // ]
-
 exports.log_in_post = passport.authenticate("local", {
         successRedirect: "/members",
         failureRedirect: "/members"
     })
-
 
 exports.join_post = asyncHandler(async (req, res, next) => {
     const memberId = req.user._id;

@@ -1,13 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Members Only</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
+    <h1>Members Only</h1>
     <a href="/members">MembersOnly area</a>
-    <p>secret message board:</p>
+    <% if (user) {%>
+    <h3>post a message:</h3>
+    <form action="/message/post" method="POST">
+      <label for="user" hidden>user</label>
+      <input name="user" placeholder="user" type="text" hidden/>
+      <label for="title">Message title</label>
+      <input name="title" placeholder="title" type="text" />
+      <label for="message">Message</label>
+      <input name="message" type="text" />
+      <button>post message</button>
+    </form>
+    <%} %>
+
+    <h3>secret message board:</h3>
+    <p>message 1</p>
+    <p>message 2</p>
+    <p>message 3</p>
+
+
     
   </body>
 </html>
