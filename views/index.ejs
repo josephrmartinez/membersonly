@@ -29,7 +29,7 @@
                 <%= message.title %><br>
                 <%= message.message %><br>
                 <%= message.timestamp_formatted %><br>
-                <% if (user.status === "admin") {%> <a href="/message/<%=message._id%>/delete">delete</a><br> <%} %>
+                <% if (user && user.status === "admin") {%> <a href="/message/<%=message._id%>/delete">delete</a><br> <%} %>
                 <br>
                 
                   
