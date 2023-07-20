@@ -28,7 +28,8 @@
                 <strong><% if (user) {%> <%= message.author.username %> <%} else  {%> secret member <%}  %></strong><br>
                 <%= message.title %><br>
                 <%= message.message %><br>
-                <%= message.timestamp %><br>
+                <%= message.timestamp_formatted %><br>
+                <% if (user.status === "admin") {%> <a href="/message/<%=message._id%>/delete">delete</a><br> <%} %>
                 <br>
                 
                   

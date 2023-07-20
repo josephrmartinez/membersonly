@@ -21,8 +21,8 @@ exports.index = asyncHandler(async (req, res, next) => {
 // })
 
 exports.message_post = [
-    body("title", "You must provide a first name").trim().isLength({min: 4}).escape(),
-    body("message", "You must provide a last name").trim().isLength({min: 8}).escape(),
+    body("title", "You must provide a title").trim().isLength({min: 4}).escape(),
+    body("message", "You must provide a message").trim().isLength({min: 8}),
     
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
