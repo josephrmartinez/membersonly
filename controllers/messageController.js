@@ -10,10 +10,15 @@ exports.index = asyncHandler(async (req, res, next) => {
     .populate("author")
     .sort({timestamp: -1}).exec()
     
-    res.render('index', { 
-        allMessages: allMessages,
-        user: req.user });
+    res.json({allMessages: allMessages,
+        user: req.user
+    });
   });
+
+//   res.render('index', { 
+//     allMessages: allMessages,
+//     user: req.user });
+// });
 
 
 // exports.sign_up_get = asyncHandler(async (req, res, next) =>{
